@@ -2,14 +2,14 @@
     <div class="conversor"> 
           
             <label class="field field_v3" style="margin-left:10px; font-style: italic;  font-size: 70.8px;  width: 600px;" >
-                <input type="text" @focus="focusA = true" v-model="moedaA_value" v-bind:placeholder="moedaA" class="field__input" style=" width: 600px;  height: auto;" >
+                <input v-mask="mask" type="text" @focus="focusA = true" v-model="moedaA_value" v-bind:placeholder="moedaA" class="field__input" style=" width: 600px;  height: auto;" >
                 <span class="field__label-wrap">
                 <span class="field__label">Ethereum</span>
                 </span>
             </label>
             
             <label class="field field_v3" style="margin-left:10px; font-style: italic;  font-size: 70.8px;  width: 600px;">
-                <input type="text" @focus="focusB = true" v-model="moedaB_value" v-bind:placeholder="moedaB" class="field__input" style=" width: 600px;  height: auto;" >
+                <input v-mask="mask" type="text" @focus="focusB = true" v-model="moedaB_value" v-bind:placeholder="moedaB" class="field__input" style=" width: 600px;  height: auto;" >
                 <span class="field__label-wrap">
                 <span class="field__label">Real Brasileiro</span>
                 </span>
@@ -19,7 +19,16 @@
 </template>
 
 <script>
+import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+  const currencyMask = createNumberMask({
+    prefix: '',
+    allowDecimal: true,
+    includeThousandsSeparator: false,
+    allowNegative: false,
+    decimalSymbol: ',',
+    decimalLimit: 13,
 
+  });
 
 export default {
     name: "Conversor",
@@ -29,7 +38,7 @@ export default {
             moedaA_value : "1",
             moedaB_value : "",
             cotacaoETH: "", 
-            mask: "",
+            mask: currencyMask,
             focusA: false,
             focusB: false,
         };
@@ -49,7 +58,7 @@ export default {
                 .then(json=>{
                     this.cotacaoETH = json['ticker']['last'];
                     this.moedaB_value = json['ticker']['last'];
-                    let temp = parseFloat(this.moedaB_value).toFixed(2).toString().replace(".", ",");
+                    let temp = parseFloat(this.moedaB_value.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
                     this.moedaB_value = temp;
                     
                 });
@@ -57,29 +66,38 @@ export default {
     watch: {
         
         moedaA_value(newValue){
-            if(!isNaN(newValue)){
+          console.log("moedaA", typeof newValue);
+          let temp2 =  (this.cotacaoETH * parseFloat(newValue.toString().replace(",","."))).toFixed(2);
+          console.log("BoolA", !isNaN(temp2));
+            if(!isNaN(temp2)){
                 if(this.focusA == true){
-                    this.moedaB_value = (this.cotacaoETH * parseFloat(newValue)).toFixed(2).toString().replace(".", ",");
+                    let temp =  (this.cotacaoETH * parseFloat(newValue.toString().replace(",","."))).toFixed(2).toString().replace(".", ",");
+                    console.log("tempB", typeof temp);
+                    this.moedaB_value = temp;
                     this.focusB = false;
                 }
             }
-            if(newValue == "NaN"){
+            if(newValue == "NaN" || newValue == ""){
                 console.log("entrouu");
-                this.moedaA_value = "";
+                this.moedaB_value = "";
             }
         },
         
         moedaB_value(newValue){
-            console.log("watchB",newValue);
-            if(!isNaN(newValue)){
+            console.log("moedaB", typeof newValue);
+            let temp2 =  (this.cotacaoETH * parseFloat(newValue.toString().replace(",","."))).toFixed(2);
+            console.log("BoolB", !isNaN(temp2));
+            if(!isNaN(temp2)){
                 if(this.focusB == true){
-                    this.moedaA_value = (parseFloat(newValue)/this.cotacaoETH).toFixed(20).toString().replace(".", ",");        
-                    this.focusA = false;
+                  let temp = (parseFloat(newValue.toString().replace(",","."))/this.cotacaoETH).toFixed(20).toString().replace(".", ","); 
+                  console.log("tempA", typeof temp);
+                  this.moedaA_value = temp;    
+                   this.focusA = false;
                 }
             }
-            if(newValue == "NaN"){
+            if(newValue == "NaN" || newValue == ""){
                 console.log("entrouu");
-                this.moedaB_value = "";
+                this.moedaA_value = "";
             }
         }
         
