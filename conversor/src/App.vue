@@ -1,20 +1,28 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" height="300px" width="300px">
-    <Conversor moeda-a="ETH" moeda-b="BRL" />
-    
-  </div>
+  <v-app>
+    <v-main>
+      <!--img alt="Ethereum" src="./assets/logo.png" height="300px" width="300px"/-->
+    <Conversor moeda-a="ETH" moeda-b="BRL" /> 
+    </v-main>
+  </v-app>
 </template>
 
 <script>
-import Conversor from "./components/Conversor.vue";
+import Conversor from './components/Conversor';
+
 export default {
   name: 'App',
+
   components: {
-    Conversor
-  }
-}
+    Conversor,
+  },
+
+  data: () => ({
+    //
+  }),
+};
 </script>
+
 
 <style>
 #app {

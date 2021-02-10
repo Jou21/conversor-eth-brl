@@ -1,19 +1,97 @@
 <template>
     <div class="conversor"> 
+
+      <div style="margin-top: 0px; font-size: 25px; color: lightslategray;">
+        
+        
+          <!--v-btn
+            v-on:click="atualizar"
+            class="ma-2"
+            :loading="loading5"
+            :disabled="loading5"
+            color="blue-grey darken-4"
+            fab
+            @click="loader = 'loading5'"
+          >
+            <v-icon color="white">
+              mdi-cached
+            </v-icon>
+            <template v-slot:loader>
+              <span class="custom-loader">
+                <v-icon light>mdi-cached</v-icon>
+              </span>
+            </template>
+          </v-btn-->
           
-            <label class="field field_v3" style="margin-left:10px; font-style: italic;  font-size: 70.8px;  width: 600px;" >
-                <input v-mask="mask" type="text" @focus="focusA = true" v-model="moedaA_value" v-bind:placeholder="moedaA" class="field__input" style=" width: 600px;  height: auto;" >
+        1 ETH ≅ {{cotacaoEthComMask}} BRL 
+      </div>
+
+      <div>
+        <img alt="Ethereum" src="../assets/logo.png" height="300px" width="300px"/>
+      </div>
+
+    <!--div style="text-align: -webkit-center;">
+      <v-img      
+        lazy-src="../assets/logo.png"
+        max-height="150"
+        max-width="250"
+        src="../assets/logo.png"></v-img>
+    </div-->
+
+     
+
+          
+            <label class="field field_v3" style="margin-left:10px; font-style: italic;  font-size: 80px;  width: 541px;" >
+                <input ref="email" v-mask="mask" type="text" @focus="focusA = true" v-model="moedaA_value" v-bind:placeholder="moedaA" class="field__input" style=" width: 541px;  height: auto;" >
                 <span class="field__label-wrap">
                 <span class="field__label">Ethereum</span>
                 </span>
             </label>
             
-            <label class="field field_v3" style="margin-left:10px; font-style: italic;  font-size: 70.8px;  width: 600px;">
-                <input v-mask="mask" type="text" @focus="focusB = true" v-model="moedaB_value" v-bind:placeholder="moedaB" class="field__input" style=" width: 600px;  height: auto;" >
+            <label class="field field_v3" style="margin-left:10px; font-style: italic;  font-size: 80px;  width: 541px;">
+                <input v-mask="mask" type="text" @focus="focusB = true" v-model="moedaB_value" v-bind:placeholder="moedaB" class="field__input" style=" width: 541px;  height: auto;" >
                 <span class="field__label-wrap">
                 <span class="field__label">Real Brasileiro</span>
                 </span>
             </label>
+            
+ 
+  <!--v-btn
+      v-on:click="atualizar"
+      :loading="loading5"
+      :disabled="loading5"
+      color="blue-grey darken-4"
+      class="ma-2 white--text"
+      fab
+      @click="loader = 'loading5'"
+    >
+      <v-icon dark>
+        mdi-refresh
+      </v-icon>
+    </v-btn-->
+
+      <div style="margin-top: 50px">
+          <v-btn
+            style="height: 50px"
+            v-on:click="atualizar"
+            class="ma-2"
+            :loading="loading5"
+            :disabled="loading5"
+            color="blue-grey darken-4"
+            
+            @click="loader = 'loading5'"
+          >
+            <!--v-icon color="white">
+              mdi-cached
+            </v-icon-->
+            <span style="color: white; font-size: 15px">Atualizar a cotação</span>
+            <template v-slot:loader>
+              <span class="custom-loader">
+                <v-icon light>mdi-cached</v-icon>
+              </span>
+            </template>
+          </v-btn>
+      </div>
 
     </div>
 </template>
@@ -27,7 +105,6 @@ import createNumberMask from 'text-mask-addons/dist/createNumberMask';
     allowNegative: false,
     decimalSymbol: ',',
     decimalLimit: 13,
-
   });
 
 export default {
@@ -35,20 +112,22 @@ export default {
     props: ["moedaA", "moedaB"],
     data(){
         return{
-            moedaA_value : "1",
+            moedaA_value : "",
             moedaB_value : "",
             cotacaoETH: "", 
             mask: currencyMask,
             focusA: false,
             focusB: false,
+            cotacaoEthComMask: "",
+            loader: null,
+            loading5: false,
         };
     },
     methods:{
+      
 
-    },
-    created() {
-        
 
+      atualizar(){
         let url = "https://www.mercadobitcoin.net/api/ETH/ticker/"
             
             fetch(url)
@@ -60,10 +139,46 @@ export default {
                     this.moedaB_value = json['ticker']['last'];
                     let temp = parseFloat(this.moedaB_value.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
                     this.moedaB_value = temp;
+                    this.moedaA_value = "1";
+                    this.cotacaoEthComMask =  parseFloat(this.cotacaoETH.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
                     
                 });
+      },
+
+      getCotacao(){
+        let url = "https://www.mercadobitcoin.net/api/ETH/ticker/"
+            
+            fetch(url)
+                .then(res=>{
+                    return res.json();
+                    })
+                .then(json=>{
+                    this.cotacaoETH = json['ticker']['last'];
+                    //this.moedaB_value = json['ticker']['last'];
+                    //let temp = parseFloat(this.moedaB_value.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
+                    //this.moedaB_value = temp;
+
+                    this.cotacaoEthComMask =  parseFloat(this.cotacaoETH.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
+                    
+                });
+      }
+    },
+    mounted() {
+      this.$refs.email.focus()
+    },
+    created() {
+        this.getCotacao();
     },
     watch: {
+
+      loader () {
+        const l = this.loader
+        this[l] = !this[l]
+
+        setTimeout(() => (this[l] = false), 1700)
+
+        this.loader = null
+      },
         
         moedaA_value(newValue){
           console.log("moedaA", typeof newValue);
@@ -313,5 +428,43 @@ body{
   display: grid;
   grid-gap: 30px;
 }
+
+
+.custom-loader {
+    animation: loader 1s infinite;
+    display: flex;
+  }
+  @-moz-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @-webkit-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @-o-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
 
 </style>
