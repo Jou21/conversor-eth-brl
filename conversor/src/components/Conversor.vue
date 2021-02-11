@@ -144,7 +144,7 @@ export default {
                     let temp = parseFloat(temp2);
                     //console.log("temp444444", temp);
                     let temp3 = temp.toFixed(2);
-                    //console.log("temp555555", temp3);
+                    console.log("Cotação do MercadoBitcoin", temp3);
                     this.moedaB_value = temp3;
                     this.moedaA_value = "1";
                     //this.cotacaoEthComMask =  parseFloat(this.cotacaoETH.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
