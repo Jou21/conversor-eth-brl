@@ -2,19 +2,26 @@
   <v-app>
     <v-main>
       <!--img alt="Ethereum" src="./assets/logo.png" height="300px" width="300px"/-->
-    <Conversor moeda-a="ETH" moeda-b="BRL" /> 
+      <Conversor moeda-a="ETH" moeda-b="BRL" />
+      <v-container>
+        <v-col cols="12" sm="12">
+          <Sobre />
+        </v-col>
+      </v-container>
     </v-main>
   </v-app>
 </template>
 
 <script>
 import Conversor from './components/Conversor';
+import Sobre from './components/Sobre';
 
 export default {
   name: 'App',
 
   components: {
     Conversor,
+    Sobre,
   },
 
   data: () => ({
