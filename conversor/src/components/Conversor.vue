@@ -42,14 +42,14 @@
 
           
             <label class="field field_v3" style="margin-left:10px; font-style: italic;  font-size: 80px;  width: 545px;" >
-                <input ref="email"  type="number" @focus="focusA = true" v-model="moedaA_value" v-bind:placeholder="moedaA" class="field__input" style=" width: 545px;  height: auto;" >
+                <input name="input1" id="input1" ref="email"  type="number" @focus="focusA = true" v-model="moedaA_value" v-bind:placeholder="moedaA" class="field__input" style=" width: 545px;  height: auto;" >
                 <span class="field__label-wrap">
                 <span class="field__label">Ethereum</span>
                 </span>
             </label>
             
             <label class="field field_v3" style="margin-left:10px; font-style: italic;  font-size: 81px;  width: 545px;">
-                <input  type="number" @focus="focusB = true" v-model="moedaB_value" v-bind:placeholder="moedaB" class="field__input" style=" width: 545px;  height: auto;" >
+                <input name="input2" id="input2" type="number" @focus="focusB = true" v-model="moedaB_value" v-bind:placeholder="moedaB" class="field__input" style=" width: 545px;  height: auto;" >
                 <span class="field__label-wrap">
                 <span class="field__label">Real Brasileiro</span>
                 </span>
@@ -107,6 +107,7 @@ import createNumberMask from 'text-mask-addons/dist/createNumberMask';
     decimalLimit: 13,
   });
 
+ 
 export default {
     name: "Conversor",
     props: ["moedaA", "moedaB"],
@@ -122,6 +123,8 @@ export default {
             cotacaoEthComMaskFloat: "",
             loader: null,
             loading5: false,
+            teclado: "",
+            apertouBackspace: false,
         };
     },
     methods:{
@@ -174,7 +177,29 @@ export default {
       }
     },
     mounted() {
-      this.$refs.email.focus()
+      this.$refs.email.focus();
+      window.addEventListener("keypress", e => {
+        //console.log("Deu Certo",String.fromCharCode(e.keyCode));
+        this.teclado = String.fromCharCode(e.keyCode);
+        console.log("TECLADO",this.teclado);
+        
+      });
+
+      window.addEventListener('keydown', function(event) {
+      const key = event.key; // const {key} = event; ES6+
+        if (key === "Backspace") {
+          this.apertouBackspace = true;
+          //this.teclado = '5';
+          console.log("TECLADO",this.teclado);
+          console.log("FUNCIONOU");
+        }else{
+          this.apertouBackspace = false;
+          console.log("outra tecla");
+        }
+      });
+
+    
+
     },
     created() {
         this.getCotacao();
@@ -191,6 +216,9 @@ export default {
       },
         
         moedaA_value(newValue, oldValue){
+          
+
+
           //console.log("moedaA", typeof newValue);
           //console.log("moedaA");
           let temp4 =  newValue//.replace(/[^\d]+/g,'');
@@ -220,8 +248,9 @@ export default {
                     this.focusB = false;
                 }
             }
-            if(temp4 == "NaN" || temp4 == "" || this.moedaA_value == ""){
-                //console.log("entrouu");
+            //if(temp4 == "NaN" || temp4 == ""){
+            if ((this.moedaA_value === '' || this.moedaA_value === null || this.moedaA_value.value === 0) && this.teclado != ',' && this.teclado != '.'){
+                console.log("entrouu11");
                 this.moedaB_value = "";
             }
         },
@@ -261,8 +290,9 @@ export default {
                   this.focusA = false;
                 }
             }
-            if(temp4 == "NaN" || temp4 == "" || this.moedaB_value == ""){
-                //console.log("entrouu");
+            //if(temp4 == "NaN" || temp4 == ""){
+            if ((this.moedaB_value === '' || this.moedaB_value === null || this.moedaB_value.value === 0) && this.teclado != ',' && this.teclado != '.' ){
+                console.log("entrouu22");
                 this.moedaA_value = "";
             }
         }
