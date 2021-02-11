@@ -41,15 +41,15 @@
      
 
           
-            <label class="field field_v3" style="margin-left:10px; font-style: italic;  font-size: 80px;  width: 541px;" >
-                <input ref="email" v-mask="mask" type="text" @focus="focusA = true" v-model="moedaA_value" v-bind:placeholder="moedaA" class="field__input" style=" width: 541px;  height: auto;" >
+            <label class="field field_v3" style="margin-left:10px; font-style: italic;  font-size: 80px;  width: 545px;" >
+                <input ref="email"  type="number" @focus="focusA = true" v-model="moedaA_value" v-bind:placeholder="moedaA" class="field__input" style=" width: 545px;  height: auto;" >
                 <span class="field__label-wrap">
                 <span class="field__label">Ethereum</span>
                 </span>
             </label>
             
-            <label class="field field_v3" style="margin-left:10px; font-style: italic;  font-size: 80px;  width: 541px;">
-                <input v-mask="mask" type="text" @focus="focusB = true" v-model="moedaB_value" v-bind:placeholder="moedaB" class="field__input" style=" width: 541px;  height: auto;" >
+            <label class="field field_v3" style="margin-left:10px; font-style: italic;  font-size: 81px;  width: 545px;">
+                <input  type="number" @focus="focusB = true" v-model="moedaB_value" v-bind:placeholder="moedaB" class="field__input" style=" width: 545px;  height: auto;" >
                 <span class="field__label-wrap">
                 <span class="field__label">Real Brasileiro</span>
                 </span>
@@ -119,6 +119,7 @@ export default {
             focusA: false,
             focusB: false,
             cotacaoEthComMask: "",
+            cotacaoEthComMaskFloat: "",
             loader: null,
             loading5: false,
         };
@@ -136,11 +137,18 @@ export default {
                     })
                 .then(json=>{
                     this.cotacaoETH = json['ticker']['last'];
-                    this.moedaB_value = json['ticker']['last'];
-                    let temp = parseFloat(this.moedaB_value.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
-                    this.moedaB_value = temp;
+                    let temp2 = json['ticker']['last'];
+                    //console.log("temp22222",temp2)
+                    //let temp = parseFloat(temp2.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
+                    //console.log("temp1111111", temp2);
+                    let temp = parseFloat(temp2);
+                    //console.log("temp444444", temp);
+                    let temp3 = temp.toFixed(2);
+                    //console.log("temp555555", temp3);
+                    this.moedaB_value = temp3;
                     this.moedaA_value = "1";
-                    this.cotacaoEthComMask =  parseFloat(this.cotacaoETH.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
+                    //this.cotacaoEthComMask =  parseFloat(this.cotacaoETH.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
+                    this.cotacaoEthComMask = temp3.replace(".",",");
                     
                 });
       },
@@ -154,12 +162,14 @@ export default {
                     })
                 .then(json=>{
                     this.cotacaoETH = json['ticker']['last'];
-                    //this.moedaB_value = json['ticker']['last'];
-                    //let temp = parseFloat(this.moedaB_value.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
-                    //this.moedaB_value = temp;
-
+                    //console.log('cotacaoETH',this.cotacaoETH);
+                    //console.log(typeof this.cotacaoETH);
                     this.cotacaoEthComMask =  parseFloat(this.cotacaoETH.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
-                    
+                    //console.log('cotacaoEthComMask',this.cotacaoEthComMask);
+                    //console.log(typeof this.cotacaoEthComMask);
+                    this.cotacaoEthComMaskFloat = parseFloat(this.cotacaoEthComMask.replace(",","."));
+                    //console.log('cotacaoEthComMaskFloat',this.cotacaoEthComMaskFloat);
+                    //console.log(typeof cotacaoEthComMaskFloat);
                 });
       }
     },
@@ -180,38 +190,79 @@ export default {
         this.loader = null
       },
         
-        moedaA_value(newValue){
-          console.log("moedaA", typeof newValue);
-          let temp2 =  (this.cotacaoETH * parseFloat(newValue.toString().replace(",","."))).toFixed(2);
-          console.log("BoolA", !isNaN(temp2));
-            if(!isNaN(temp2)){
+        moedaA_value(newValue, oldValue){
+          //console.log("moedaA", typeof newValue);
+          //console.log("moedaA");
+          let temp4 =  newValue//.replace(/[^\d]+/g,'');
+
+          if(temp4 == ""){
+            temp4 = oldValue;
+          }
+          console.log("temp4", temp4);
+
+          let temp2 =  (this.cotacaoETH * parseFloat(temp4.toString().replace(",","."))).toFixed(2);
+          //console.log("temp2", temp2)
+          //console.log("tipoTemp2",typeof temp2)
+          console.log("BoolA", !isNaN(temp2.replace(/[^\d]+/g,'')));
+            if(!isNaN(temp2.replace(/[^\d]+/g,''))){
                 if(this.focusA == true){
-                    let temp =  (this.cotacaoETH * parseFloat(newValue.toString().replace(",","."))).toFixed(2).toString().replace(".", ",");
-                    console.log("tempB", typeof temp);
-                    this.moedaB_value = temp;
+                    //console.log("newValue",newValue);
+                    //console.log("tipoNewValue",typeof newValue);
+                    //let temp =  (this.cotacaoETH * parseFloat(newValue.toString().replace(",","."))).toFixed(2).toString().replace(".", ",");
+                    //console.log("temp22222222")
+                    let temp = this.cotacaoEthComMaskFloat * parseFloat(temp4);
+                    
+                    //console.log("tempB", temp);
+                    //console.log("tempB", typeof temp);
+                    this.moedaB_value = temp.toFixed(2);
+                    //console.log("moedaB_value", this.moedaB_value);
+                    //console.log("moedaB_value", typeof this.moedaB_value);
                     this.focusB = false;
                 }
             }
-            if(newValue == "NaN" || newValue == ""){
-                console.log("entrouu");
+            if(temp4 == "NaN" || temp4 == "" || this.moedaA_value == ""){
+                //console.log("entrouu");
                 this.moedaB_value = "";
             }
         },
         
-        moedaB_value(newValue){
-            console.log("moedaB", typeof newValue);
-            let temp2 =  (this.cotacaoETH * parseFloat(newValue.toString().replace(",","."))).toFixed(2);
-            console.log("BoolB", !isNaN(temp2));
-            if(!isNaN(temp2)){
+        moedaB_value(newValue, oldValue){
+            //console.log("moedaB");
+            //console.log(newValue)
+            let temp4 =  newValue//.replace(/[^\d]+/g,'');
+
+            if(temp4 == ""){
+              temp4 = oldValue;
+            }
+            console.log("temp4", temp4);
+            
+            //console.log("newValue", typeof newValue);
+            let temp2 =  (this.cotacaoETH * parseFloat(temp4.toString().replace(",","."))).toFixed(2);
+
+            //console.log("moedaB2",temp2);
+            //console.log("temp2", temp2)
+            //console.log("tipoTemp2",typeof temp2)
+            console.log("BoolB", !isNaN(temp2.replace(/[^\d]+/g,'')));
+            if(!isNaN(temp2.replace(/[^\d]+/g,''))){
+              console.log("temp444444444")
                 if(this.focusB == true){
-                  let temp = (parseFloat(newValue.toString().replace(",","."))/this.cotacaoETH).toFixed(20).toString().replace(".", ","); 
-                  console.log("tempA", typeof temp);
-                  this.moedaA_value = temp;    
-                   this.focusA = false;
+                  //let temp = (parseFloat(newValue.toString().replace(",","."))/this.cotacaoETH).toFixed(20).toString().replace(".", ","); 
+                  console.log("temp333333333")
+                  //console.log("newValue", newValue+"eae")
+
+                  console.log("cotacaoEthComMaskFloat",this.cotacaoEthComMaskFloat)
+                  let temp = parseFloat((parseFloat(temp4) / this.cotacaoEthComMaskFloat).toFixed(20))
+                  
+                  //console.log("tempA", temp);
+                  //console.log("tempA", typeof temp);
+                  this.moedaA_value = temp; 
+                  //console.log("moedaA_value", this.moedaA_value);
+                  //console.log("moedaA_value", typeof this.moedaA_value);
+                  this.focusA = false;
                 }
             }
-            if(newValue == "NaN" || newValue == ""){
-                console.log("entrouu");
+            if(temp4 == "NaN" || temp4 == "" || this.moedaB_value == ""){
+                //console.log("entrouu");
                 this.moedaA_value = "";
             }
         }
@@ -466,5 +517,15 @@ body{
       transform: rotate(360deg);
     }
   }
+
+  input[type=number]::-webkit-inner-spin-button { 
+    -webkit-appearance: none;
+    
+}
+input[type=number] { 
+   -moz-appearance: textfield;
+   appearance: textfield;
+
+}
 
 </style>
