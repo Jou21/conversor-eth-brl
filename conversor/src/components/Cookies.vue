@@ -1,5 +1,5 @@
 <template>
-    <div class="cookies"> 
+    <div class="cookies alinhaParaEsquerda"> 
         
 <h2 dir="ltr" style="line-height:1.38;margin-left: 19pt;margin-right: 19pt;margin-top:67pt;margin-bottom:23pt;"><span style="font-size:22pt;font-family:Arial;color:#616161;background-color:transparent;font-weight:700;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Pol&iacute;tica de Cookies</span></h2>
 
@@ -71,12 +71,7 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.alinhaParaEsquerda {
   text-align: left;
-  color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
