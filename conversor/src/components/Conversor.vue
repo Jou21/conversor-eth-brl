@@ -93,10 +93,45 @@
           </v-btn>
       </div>
 
+      <div style="overflow-x:auto; margin-top: 400px">
+  <table>
+    <tr>
+      <th>Exchange</th>
+      <th>Cotação</th>
+      
+    </tr>
+    <tr>
+      <td>Binance</td>
+      <td>R$ {{cotacaoBinance}}</td>
+      
+    </tr>
+    <tr>
+      <td>Braziliex</td>
+      <td>R$ {{cotacaoBraziliex}}</td>
+      
+    </tr>
+    <tr>
+      <td>Mercado Bitcoin</td>
+      <td>R$ {{cotacaoMercadoBitcoin}}</td>
+      
+    </tr>
+    <tr>
+      <td>NovaDAX</td>
+      <td>R$ {{cotacaoNovaDAX}}</td>
+      
+    </tr>
+  </table>
+  <div style="text-align: right; margin-right: 2px">
+  <small><i >Última atualização: {{ dataHoje }} às {{ horaHoje }}</i></small>
+  </div>
+</div>
     </div>
 </template>
 
 <script>
+
+
+
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
   const currencyMask = createNumberMask({
     prefix: '',
@@ -113,6 +148,12 @@ export default {
     props: ["moedaA", "moedaB"],
     data(){
         return{
+            dataHoje: "",
+            horaHoje: "",
+            cotacaoBinance: "",
+            cotacaoBraziliex: "",
+            cotacaoMercadoBitcoin: "",
+            cotacaoNovaDAX: "",
             moedaA_value : "",
             moedaB_value : "",
             cotacaoETH: "", 
@@ -129,48 +170,196 @@ export default {
     },
     methods:{
       
+      getDataEHora() {
+        var data = new Date();
 
+        // Guarda cada pedaço em uma variável
+        var dia     = data.getDate();           // 1-31
+        //var dia_sem = data.getDay();            // 0-6 (zero=domingo)
+        var mes     = data.getMonth();          // 0-11 (zero=janeiro)
+        //var ano2    = data.getYear();           // 2 dígitos
+        var ano4    = data.getFullYear();       // 4 dígitos
+        var hora    = data.getHours();          // 0-23
+        var min     = data.getMinutes();        // 0-59
+
+        this.dataHoje =  ("00" + dia).slice(-2) + '/' +  ("00" + (mes+1)).slice(-2)  + '/' + ano4 ;
+        this.horaHoje =  ("00" + hora).slice(-2) + ':' + ("00" + min).slice(-2); // + ':' + seg;
+
+      },
 
       atualizar(){
-        let url = "https://www.mercadobitcoin.net/api/ETH/ticker/"
-            
-            fetch(url)
+        this.getDataEHora();
+
+        let urlBinance = "https://api.binance.com/api/v3/ticker/price?symbol=ETHBRL";
+
+        fetch(urlBinance)
                 .then(res=>{
                     return res.json();
                     })
                 .then(json=>{
-                    this.cotacaoETH = json['ticker']['last'];
-                    let temp2 = json['ticker']['last'];
+                    this.cotacaoETH = json['price'];
+                    let temp2 = json['price'];
                     //console.log("temp22222",temp2)
                     //let temp = parseFloat(temp2.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
                     //console.log("temp1111111", temp2);
                     let temp = parseFloat(temp2);
                     //console.log("temp444444", temp);
                     let temp3 = temp.toFixed(2);
-                    console.log("Cotação do MercadoBitcoin", temp3);
+                    //console.log("Cotação do MercadoBitcoin", temp3);
                     this.moedaB_value = temp3;
                     this.moedaA_value = "1";
                     //this.cotacaoEthComMask =  parseFloat(this.cotacaoETH.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
                     this.cotacaoEthComMask = temp3.replace(".",",");
-                    
+                    this.cotacaoBinance = temp3.replace(".",",");
                 });
-      },
 
-      getCotacao(){
-        let url = "https://www.mercadobitcoin.net/api/ETH/ticker/"
+                let urlBraziliex = "https://braziliex.com/api/v1/public/ticker/eth_brl"; //cotacaoBraziliex
             
-            fetch(url)
+            fetch(urlBraziliex)
                 .then(res=>{
                     return res.json();
                     })
                 .then(json=>{
-                    this.cotacaoETH = json['ticker']['last'];
+                    //this.cotacaoETH = json['ticker']['last'];
+                    let temp2 = json['last'];
+                    //console.log("temp55555",temp2)
+                    //let temp = parseFloat(temp2.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
+                    //console.log("temp1111111", temp2);
+                    let temp = parseFloat(temp2);
+                    //console.log("temp444444", temp);
+                    let temp3 = temp.toFixed(2);
+                    //console.log("Cotação do MercadoBitcoin", temp3);
+                    //this.moedaB_value = temp3;
+                    //this.moedaA_value = "1";
+                    //this.cotacaoEthComMask =  parseFloat(this.cotacaoETH.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
+                    //this.cotacaoEthComMask = temp3.replace(".",",");
+                    this.cotacaoBraziliex = temp3.replace(".",",");
+                });
+
+        let urlMercadoBitcoin = "https://www.mercadobitcoin.net/api/ETH/ticker/";
+            
+            fetch(urlMercadoBitcoin)
+                .then(res=>{
+                    return res.json();
+                    })
+                .then(json=>{
+                    //this.cotacaoETH = json['ticker']['last'];
+                    let temp2 = json['ticker']['last'];
+                    //console.log("temp333333",temp2)
+                    //let temp = parseFloat(temp2.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
+                    //console.log("temp1111111", temp2);
+                    let temp = parseFloat(temp2);
+                    //console.log("temp444444", temp);
+                    let temp3 = temp.toFixed(2);
+                    //console.log("Cotação do MercadoBitcoin", temp3);
+                    //this.moedaB_value = temp3;
+                    //this.moedaA_value = "1";
+                    //this.cotacaoEthComMask =  parseFloat(this.cotacaoETH.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
+                    //this.cotacaoEthComMask = temp3.replace(".",",");
+                    this.cotacaoMercadoBitcoin = temp3.replace(".",",");
+                });
+
+
+                let urlNovaDAX = "https://api.novadax.com/v1/market/ticker?symbol=ETH_BRL";
+            
+            fetch(urlNovaDAX)
+                .then(res=>{
+                    return res.json();
+                    })
+                .then(json=>{
+                    //this.cotacaoETH = json['ticker']['last'];
+                    console.log("temp5",json)
+                    let temp2 = json['data']['ask'];
+                    console.log("temp555555",temp2)
+                    //let temp = parseFloat(temp2.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
+                    //console.log("temp1111111", temp2);
+                    let temp = parseFloat(temp2);
+                    //console.log("temp444444", temp);
+                    let temp3 = temp.toFixed(2);
+                    //console.log("Cotação do MercadoBitcoin", temp3);
+                    //this.moedaB_value = temp3;
+                    //this.moedaA_value = "1";
+                    //this.cotacaoEthComMask =  parseFloat(this.cotacaoETH.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
+                    //this.cotacaoEthComMask = temp3.replace(".",",");
+                    this.cotacaoNovaDAX = temp3.replace(".",",");
+                });
+      },
+
+      getCotacao(){
+        let urlBinance = "https://api.binance.com/api/v3/ticker/price?symbol=ETHBRL";
+            
+            fetch(urlBinance)
+                .then(res=>{
+                    return res.json();
+                    })
+                .then(json=>{
+                    this.cotacaoETH = json['price'];
                     //console.log('cotacaoETH',this.cotacaoETH);
                     //console.log(typeof this.cotacaoETH);
                     this.cotacaoEthComMask =  parseFloat(this.cotacaoETH.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
+                    this.cotacaoBinance = parseFloat(this.cotacaoETH.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
                     //console.log('cotacaoEthComMask',this.cotacaoEthComMask);
                     //console.log(typeof this.cotacaoEthComMask);
                     this.cotacaoEthComMaskFloat = parseFloat(this.cotacaoEthComMask.replace(",","."));
+                    //console.log('cotacaoEthComMaskFloat',this.cotacaoEthComMaskFloat);
+                    //console.log(typeof cotacaoEthComMaskFloat);
+                });
+
+
+        let urlBraziliex = "https://braziliex.com/api/v1/public/ticker/eth_brl";
+            
+            fetch(urlBraziliex)
+                .then(res=>{
+                    return res.json();
+                    })
+                .then(json=>{
+                    let cotacao = json['last'];
+                    //console.log('cotacaoETH',this.cotacaoETH);
+                    //console.log(typeof this.cotacaoETH);
+                    //this.cotacaoEthComMask =  parseFloat(cotacao.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
+                    this.cotacaoBraziliex = parseFloat(cotacao.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
+                    //console.log('cotacaoEthComMask',this.cotacaoEthComMask);
+                    //console.log(typeof this.cotacaoEthComMask);
+                    //this.cotacaoEthComMaskFloat = parseFloat(this.cotacaoEthComMask.replace(",","."));
+                    //console.log('cotacaoEthComMaskFloat',this.cotacaoEthComMaskFloat);
+                    //console.log(typeof cotacaoEthComMaskFloat);
+                });
+
+
+        let urlMercadoBitcoin = "https://www.mercadobitcoin.net/api/ETH/ticker/";
+            
+            fetch(urlMercadoBitcoin)
+                .then(res=>{
+                    return res.json();
+                    })
+                .then(json=>{
+                    let cotacao = json['ticker']['last'];
+                    //console.log('cotacaoETH',this.cotacaoETH);
+                    //console.log(typeof this.cotacaoETH);
+                    //this.cotacaoEthComMask =  parseFloat(cotacao.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
+                    this.cotacaoMercadoBitcoin = parseFloat(cotacao.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
+                    //console.log('cotacaoEthComMask',this.cotacaoEthComMask);
+                    //console.log(typeof this.cotacaoEthComMask);
+                    //this.cotacaoEthComMaskFloat = parseFloat(this.cotacaoEthComMask.replace(",","."));
+                    //console.log('cotacaoEthComMaskFloat',this.cotacaoEthComMaskFloat);
+                    //console.log(typeof cotacaoEthComMaskFloat);
+                });
+
+            let urlNovaDAX = "https://api.novadax.com/v1/market/ticker?symbol=ETH_BRL";
+            
+            fetch(urlNovaDAX)
+                .then(res=>{
+                    return res.json();
+                    })
+                .then(json=>{
+                    let cotacao = json['ticker']['last'];
+                    //console.log('cotacaoETH',this.cotacaoETH);
+                    //console.log(typeof this.cotacaoETH);
+                    //this.cotacaoEthComMask =  parseFloat(cotacao.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
+                    this.cotacaoNovaDAX = parseFloat(cotacao.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
+                    //console.log('cotacaoEthComMask',this.cotacaoEthComMask);
+                    //console.log(typeof this.cotacaoEthComMask);
+                    //this.cotacaoEthComMaskFloat = parseFloat(this.cotacaoEthComMask.replace(",","."));
                     //console.log('cotacaoEthComMaskFloat',this.cotacaoEthComMaskFloat);
                     //console.log(typeof cotacaoEthComMaskFloat);
                 });
@@ -181,7 +370,7 @@ export default {
       window.addEventListener("keypress", e => {
         //console.log("Deu Certo",String.fromCharCode(e.keyCode));
         this.teclado = String.fromCharCode(e.keyCode);
-        console.log("TECLADO",this.teclado);
+        //console.log("TECLADO",this.teclado);
         
       });
 
@@ -190,11 +379,11 @@ export default {
         if (key === "Backspace") {
           this.apertouBackspace = true;
           //this.teclado = '5';
-          console.log("TECLADO",this.teclado);
-          console.log("FUNCIONOU");
+          //console.log("TECLADO",this.teclado);
+          //console.log("FUNCIONOU");
         }else{
           this.apertouBackspace = false;
-          console.log("outra tecla");
+          //console.log("outra tecla");
         }
       });
 
@@ -203,6 +392,7 @@ export default {
     },
     created() {
         this.getCotacao();
+        this.getDataEHora();
     },
     watch: {
 
@@ -226,12 +416,12 @@ export default {
           if(temp4 == ""){
             temp4 = oldValue;
           }
-          console.log("temp4", temp4);
+          //console.log("temp4", temp4);
 
           let temp2 =  (this.cotacaoETH * parseFloat(temp4.toString().replace(",","."))).toFixed(2);
           //console.log("temp2", temp2)
           //console.log("tipoTemp2",typeof temp2)
-          console.log("BoolA", !isNaN(temp2.replace(/[^\d]+/g,'')));
+          //console.log("BoolA", !isNaN(temp2.replace(/[^\d]+/g,'')));
             if(!isNaN(temp2.replace(/[^\d]+/g,''))){
                 if(this.focusA == true){
                     //console.log("newValue",newValue);
@@ -263,7 +453,7 @@ export default {
             if(temp4 == ""){
               temp4 = oldValue;
             }
-            console.log("temp4", temp4);
+            //console.log("temp4", temp4);
             
             //console.log("newValue", typeof newValue);
             let temp2 =  (this.cotacaoETH * parseFloat(temp4.toString().replace(",","."))).toFixed(2);
@@ -271,15 +461,15 @@ export default {
             //console.log("moedaB2",temp2);
             //console.log("temp2", temp2)
             //console.log("tipoTemp2",typeof temp2)
-            console.log("BoolB", !isNaN(temp2.replace(/[^\d]+/g,'')));
+            //console.log("BoolB", !isNaN(temp2.replace(/[^\d]+/g,'')));
             if(!isNaN(temp2.replace(/[^\d]+/g,''))){
-              console.log("temp444444444")
+              //console.log("temp444444444")
                 if(this.focusB == true){
                   //let temp = (parseFloat(newValue.toString().replace(",","."))/this.cotacaoETH).toFixed(20).toString().replace(".", ","); 
-                  console.log("temp333333333")
+                  //console.log("temp333333333")
                   //console.log("newValue", newValue+"eae")
 
-                  console.log("cotacaoEthComMaskFloat",this.cotacaoEthComMaskFloat)
+                  //console.log("cotacaoEthComMaskFloat",this.cotacaoEthComMaskFloat)
                   let temp = parseFloat((parseFloat(temp4) / this.cotacaoEthComMaskFloat).toFixed(20))
                   
                   //console.log("tempA", temp);
@@ -292,7 +482,7 @@ export default {
             }
             //if(temp4 == "NaN" || temp4 == ""){
             if ((this.moedaB_value === '' || this.moedaB_value === null || this.moedaB_value.value === 0) && this.teclado != ',' && this.teclado != '.' ){
-                console.log("entrouu22");
+                //console.log("entrouu22");
                 this.moedaA_value = "";
             }
         }
@@ -557,5 +747,19 @@ input[type=number] {
    appearance: textfield;
 
 }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid #ddd;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
 
 </style>

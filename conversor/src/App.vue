@@ -1,10 +1,10 @@
 <template>
   <v-app>
     <v-main>
-      <!--img alt="Ethereum" src="./assets/logo.png" height="300px" width="300px"/-->
-      <Conversor moeda-a="ETH" moeda-b="BRL" />
       <v-container>
         <v-col cols="12" sm="12">
+          <!--img alt="Ethereum" src="./assets/logo.png" height="300px" width="300px"/-->
+          <Conversor moeda-a="ETH" moeda-b="BRL" />
           <Sobre />
         </v-col>
       </v-container>
