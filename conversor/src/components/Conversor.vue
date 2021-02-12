@@ -352,7 +352,7 @@ export default {
                     return res.json();
                     })
                 .then(json=>{
-                    let cotacao = json['ticker']['last'];
+                    let cotacao = json['data']['ask'];
                     //console.log('cotacaoETH',this.cotacaoETH);
                     //console.log(typeof this.cotacaoETH);
                     //this.cotacaoEthComMask =  parseFloat(cotacao.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
