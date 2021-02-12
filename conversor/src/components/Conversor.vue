@@ -311,7 +311,7 @@ export default {
                     //this.moedaA_value = "1";
                     //this.cotacaoEthComMask =  parseFloat(this.cotacaoETH.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
                     //this.cotacaoEthComMask = temp3.replace(".",",");
-                    this.cotacaoBrasilBitcoin = temp3.replace(".",",");
+                    this.cotacaoBrasilBitcoin = temp3.replace(".",","); 
                 });
       },
 
