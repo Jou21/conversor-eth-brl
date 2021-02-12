@@ -271,7 +271,7 @@ export default {
                 });
 
 
-                let urlCoinbase = "http://api.coinbase.com/v2/prices/ETH-BRL/buy";
+                let urlCoinbase = "https://api.coinbase.com/v2/prices/ETH-BRL/buy";
             
             fetch(urlCoinbase)
                 .then(res=>{
@@ -380,7 +380,7 @@ export default {
                     //console.log(typeof cotacaoEthComMaskFloat);
                 });
 
-            let urlCoinbase = "http://api.coinbase.com/v2/prices/ETH-BRL/buy";
+            let urlCoinbase = "https://api.coinbase.com/v2/prices/ETH-BRL/buy";
             
             fetch(urlCoinbase)
                 .then(res=>{
@@ -388,6 +388,7 @@ export default {
                     })
                 .then(json=>{
                     let cotacao = json['data']['amount'];
+                    console.log('COTACAO', cotacao);
                     //console.log('cotacaoETH',this.cotacaoETH);
                     //console.log(typeof this.cotacaoETH);
                     //this.cotacaoEthComMask =  parseFloat(cotacao.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
