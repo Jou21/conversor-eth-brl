@@ -43,14 +43,14 @@
 
           
             <label class="field field_v3" style="margin-left:10px; font-style: italic;  font-size: 80px;  width: 545px;" >
-                <input name="input1" id="input1" ref="email"  type="number" @focus="focusA = true" v-model="moedaA_value" v-bind:placeholder="moedaA" class="field__input" style=" width: 545px;  height: auto;" >
+                <input name="input1" id="input1" ref="email"  type="number" @focus="focusA = true" v-model="moedaA_value" placeholder="ETH" class="field__input" style=" width: 545px;  height: auto;" >
                 <span class="field__label-wrap">
                 <span class="field__label">Ethereum</span>
                 </span>
             </label>
             
             <label class="field field_v3" style="margin-left:10px; font-style: italic;  font-size: 81px;  width: 545px;">
-                <input name="input2" id="input2" type="number" @focus="focusB = true" v-model="moedaB_value" v-bind:placeholder="moedaB" class="field__input" style=" width: 545px;  height: auto;" >
+                <input name="input2" id="input2" type="number" @focus="focusB = true" v-model="moedaB_value" placeholder="BRL" class="field__input" style=" width: 545px;  height: auto;" >
                 <span class="field__label-wrap">
                 <span class="field__label">Real Brasileiro</span>
                 </span>
@@ -134,12 +134,14 @@
   <small><i >Última atualização: {{ dataHoje }} às {{ horaHoje }}</i></small>
   </div>
 </div>
+<Sobre />
     </div>
+    
 </template>
 
 <script>
 
-
+import Sobre from './Sobre';
 
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
   const currencyMask = createNumberMask({
@@ -154,7 +156,10 @@ import createNumberMask from 'text-mask-addons/dist/createNumberMask';
  
 export default {
     name: "Conversor",
-    props: ["moedaA", "moedaB"],
+    props: [],
+    components: {
+      Sobre,
+    },
     data(){
         return{
             windowHeight: window.innerHeight - 689,
