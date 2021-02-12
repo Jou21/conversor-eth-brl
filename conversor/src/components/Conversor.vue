@@ -28,7 +28,7 @@
       </div>
 
       <div>
-        <img alt="Ethereum" src="../assets/logo.png" height="300px" width="300px"/>
+        <img alt="Ethereum" src="../assets/logo.png" style="width: 100%; height:100%; max-width:300px; max-height:300px"/>
       </div>
 
     <!--div style="text-align: -webkit-center;">
@@ -39,23 +39,30 @@
         src="../assets/logo.png"></v-img>
     </div-->
 
-     
-
-          
-            <label class="field field_v3" style="margin-left:10px; font-style: italic;  font-size: 80px;  width: 545px;" >
-                <input name="input1" id="input1" ref="email"  type="number" @focus="focusA = true" v-model="moedaA_value" placeholder="ETH" class="field__input" style=" width: 545px;  height: auto;" >
+    <v-row>
+      <v-col cols="12" sm="6">
+        
+              
+                <label class="field field_v3" style=" font-style: italic;  font-size: max(30px, 4vw);  width: 100%;" >
+                <input name="input1" id="input1" ref="email"  type="number" @focus="focusA = true" v-model="moedaA_value" placeholder="ETH" class="field__input" style="   height: auto;" >
                 <span class="field__label-wrap">
-                <span class="field__label">Ethereum</span>
+                  <span class="field__label">Ethereum</span>
                 </span>
-            </label>
-            
-            <label class="field field_v3" style="margin-left:10px; font-style: italic;  font-size: 81px;  width: 545px;">
-                <input name="input2" id="input2" type="number" @focus="focusB = true" v-model="moedaB_value" placeholder="BRL" class="field__input" style=" width: 545px;  height: auto;" >
+                </label>
+              
+        
+      </v-col>
+        <v-col cols="12" sm="6">
+        
+              <label class="field field_v3" style=" font-style: italic;  font-size: max(30px, 4vw);  width: 100%;">
+                <input name="input2" id="input2" type="number" @focus="focusB = true" v-model="moedaB_value" placeholder="BRL" class="field__input" style=" height: auto;" >
                 <span class="field__label-wrap">
                 <span class="field__label">Real Brasileiro</span>
                 </span>
             </label>
-            
+        
+      </v-col>
+    </v-row>
  
   <!--v-btn
       v-on:click="atualizar"
@@ -829,6 +836,71 @@ th, td {
 }
 
 tr:nth-child(even){background-color: #f2f2f2}
+
+
+@media screen and (max-width: 600px) {
+  .col-25, .col-75, input[type=submit] {
+    width: 100%;
+    margin-top: 0;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+input[type=text], select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+}
+
+label {
+  padding: 12px 12px 12px 0;
+  display: inline-block;
+}
+
+input[type=submit] {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  float: right;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+
+.container {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+
+.col-25 {
+  float: left;
+  width: 25%;
+  margin-top: 6px;
+}
+
+.col-75 {
+  float: left;
+  width: 100%;
+  margin-top: 6px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
 
 
 </style>
