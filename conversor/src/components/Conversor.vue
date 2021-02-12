@@ -1,6 +1,7 @@
 <template>
-    <div class="conversor"> 
 
+    <div class="conversor"> 
+      
       <div style="margin-top: 0px; font-size: 25px; color: lightslategray;">
         
         
@@ -92,8 +93,11 @@
             </template>
           </v-btn>
       </div>
+      <!--div v-bind:style="{ height: (this.windowHeight)  + 'px' }"></div--> 
+      <!--div style="padding-bottom: 100%" /-->
+      <div id="myDIV" v-bind:style="{ height: (windowHeight)  + 'px' }" />
 
-      <div style="overflow-x:auto; margin-top: 400px">
+      <div style="overflow-x:auto; margin-top: 0px">
   <table>
     <tr>
       <th>Exchange</th>
@@ -116,8 +120,8 @@
       
     </tr>
     <tr>
-      <td>NovaDAX</td>
-      <td>R$ {{cotacaoNovaDAX}}</td>
+      <td>Coinbase</td>
+      <td>R$ {{cotacaoCoinbase}}</td>
       
     </tr>
     <tr>
@@ -153,12 +157,13 @@ export default {
     props: ["moedaA", "moedaB"],
     data(){
         return{
+            windowHeight: window.innerHeight - 689,
             dataHoje: "",
             horaHoje: "",
             cotacaoBinance: "",
             cotacaoBraziliex: "",
             cotacaoMercadoBitcoin: "",
-            cotacaoNovaDAX: "",
+            cotacaoCoinbase: "",
             cotacaoBrasilBitcoin: "",
             moedaA_value : "",
             moedaB_value : "",
@@ -266,17 +271,17 @@ export default {
                 });
 
 
-                let urlNovaDAX = "https://api.novadax.com/v1/market/ticker?symbol=ETH_BRL";
+                let urlCoinbase = "http://api.coinbase.com/v2/prices/ETH-BRL/buy";
             
-            fetch(urlNovaDAX)
+            fetch(urlCoinbase)
                 .then(res=>{
                     return res.json();
                     })
                 .then(json=>{
                     //this.cotacaoETH = json['ticker']['last'];
-                    console.log("temp5",json)
-                    let temp2 = json['data']['ask'];
-                    console.log("temp555555",temp2)
+                    //console.log("temp5",json)
+                    let temp2 = json['data']['amount'];
+                    //console.log("temp555555",temp2)
                     //let temp = parseFloat(temp2.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
                     //console.log("temp1111111", temp2);
                     let temp = parseFloat(temp2);
@@ -287,7 +292,7 @@ export default {
                     //this.moedaA_value = "1";
                     //this.cotacaoEthComMask =  parseFloat(this.cotacaoETH.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
                     //this.cotacaoEthComMask = temp3.replace(".",",");
-                    this.cotacaoNovaDAX = temp3.replace(".",",");
+                    this.cotacaoCoinbase = temp3.replace(".",",");
                 });
 
                  let urlBrasilBitcoin = "https://brasilbitcoin.com.br/API/prices/ETH";
@@ -375,18 +380,18 @@ export default {
                     //console.log(typeof cotacaoEthComMaskFloat);
                 });
 
-            let urlNovaDAX = "https://api.novadax.com/v1/market/ticker?symbol=ETH_BRL";
+            let urlCoinbase = "http://api.coinbase.com/v2/prices/ETH-BRL/buy";
             
-            fetch(urlNovaDAX)
+            fetch(urlCoinbase)
                 .then(res=>{
                     return res.json();
                     })
                 .then(json=>{
-                    let cotacao = json['data']['ask'];
+                    let cotacao = json['data']['amount'];
                     //console.log('cotacaoETH',this.cotacaoETH);
                     //console.log(typeof this.cotacaoETH);
                     //this.cotacaoEthComMask =  parseFloat(cotacao.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
-                    this.cotacaoNovaDAX = parseFloat(cotacao.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
+                    this.cotacaoCoinbase = parseFloat(cotacao.toString().replace(",",".")).toFixed(2).toString().replace(".", ",");
                     //console.log('cotacaoEthComMask',this.cotacaoEthComMask);
                     //console.log(typeof this.cotacaoEthComMask);
                     //this.cotacaoEthComMaskFloat = parseFloat(this.cotacaoEthComMask.replace(",","."));
@@ -416,6 +421,14 @@ export default {
     },
     mounted() {
       this.$refs.email.focus();
+
+      window.onresize = function(event) {
+        console.log('NOVO TAMANHO', event);
+        this.windowHeight = window.innerHeight;
+        console.log('NOVO TAMANHO>>>>>>>', this.windowHeight);
+        document.getElementById("myDIV").style.height = (window.innerHeight - 689) + "px";
+      };
+
       window.addEventListener("keypress", e => {
         //console.log("Deu Certo",String.fromCharCode(e.keyCode));
         this.teclado = String.fromCharCode(e.keyCode);
@@ -810,5 +823,6 @@ th, td {
 }
 
 tr:nth-child(even){background-color: #f2f2f2}
+
 
 </style>
