@@ -57,6 +57,18 @@
           </v-btn>
       </div>
 
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+      <!-- primeiro -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-5863357144334897"
+          data-ad-slot="4415387961"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+
       <div id="myDIV" v-bind:style="{ height: (windowHeight)  + 'px' }" />
 
       <div style="overflow-x:auto; margin-top: 0px">
